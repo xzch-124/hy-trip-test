@@ -1,5 +1,5 @@
 <template>
-    <dic class="tab-bar">
+    <div class="tab-bar">
         <template v-for="(item, index) in tabberDate">
             <div class="tab-bar-item" 
                 :class="{ active: index === currentIndex }"
@@ -13,7 +13,7 @@
             </div>
         </template>
 
-    </dic>
+    </div>
 </template>
 
 <script setup>

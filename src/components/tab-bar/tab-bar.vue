@@ -1,5 +1,5 @@
 <template>
-    <dic class="tab-bar">
+    <div class="tab-bar">
         <div class="tab-bar-item">
             <img src="@/assets/imgs/tabbar/tab_home.png" alt="">
             <span class="text">首页</span>
@@ -17,7 +17,7 @@
             <span class="text">消息</span>
         </div>
 
-    </dic>
+    </div>
 </template>
 
 <script setup>
