@@ -1,6 +1,8 @@
 import { ref, onMounted, onUnmounted } from "vue";
 
-export default function useScroll() {
+export default function useScroll(elRef) {
+  let el = window
+
   const isReachBottom = ref(false)
 
   const clientHeight = ref(0)
@@ -8,10 +10,15 @@ export default function useScroll() {
   const scrollHeight = ref(0)
 
   const scrollListenerHandler = () => {
-    clientHeight.value = document.documentElement.clientHeight
-    scrollTop.value = document.documentElement.scrollTop
-    scrollHeight.value = document.documentElement.scrollHeight
-
+    if (el === window) {
+      clientHeight.value = document.documentElement.clientHeight
+      scrollTop.value = document.documentElement.scrollTop
+      scrollHeight.value = document.documentElement.scrollHeight
+    } else {
+      clientHeight.value = el.clientHeight
+      scrollTop.value = el.scrollTop
+      scrollHeight.value = el.scrollHeight
+    }
     // console.log(scrollHeight, scrollTop, clientHeight)
     // +1防止clientTop为小数时比较不能成立
     if (scrollTop.value + clientHeight.value + 1 >= scrollHeight.value) {
@@ -21,11 +28,15 @@ export default function useScroll() {
   }
 
   onMounted(() => {
-    window.addEventListener("scroll", scrollListenerHandler)
+    if (elRef) {
+      el = elRef.value
+      // console.log(elRef)
+    }
+    el.addEventListener("scroll", scrollListenerHandler)
   })
 
   onUnmounted(() => {
-    window.removeEventListener("scroll", scrollListenerHandler)
+    el.removeEventListener("scroll", scrollListenerHandler)
   })
 
   return { isReachBottom, scrollHeight, scrollTop, clientHeight }

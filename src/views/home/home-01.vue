@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="home" ref="homeRef">
         <homeNavBar></homeNavBar>
         <div class="banner">
             <img src="@/assets/imgs/home/banner.webp" alt="">
@@ -16,6 +16,11 @@
     </div>
 </template>
 
+<script>
+  export default {
+    name: "home"
+  }
+</script>
 <script setup>
 import homeNavBar from './cpns/home-nav-bar.vue';
 import homeSerchBox from './cpns/home-serch-box.vue';
@@ -26,7 +31,7 @@ import searchBar from '@/components/SearchBar/search-bar.vue';
 import useHomeStore from '@/stores/modules/home';
 import useScroll from '@/hooks/useScroll'
 
-import { watch, computed } from 'vue';
+import { ref, watch, computed, onActivated } from 'vue';
 
 const homeStore = useHomeStore();
 homeStore.fetchGetHotSuggestData(); // 获取在子组件<homeSerchBox>中使用的网络数据
@@ -38,7 +43,8 @@ const moreData = () => {
     homeStore.fetchGetHomeHouseListData()
 }
 
-const { isReachBottom, scrollTop } = useScroll()
+const homeRef = ref()
+const { isReachBottom, scrollTop } = useScroll(homeRef)
 watch(isReachBottom, (newValue) => {
   if (newValue) {
     homeStore.fetchGetHomeHouseListData().then(() => {
@@ -51,13 +57,20 @@ const isShowSearchBar = computed(() => {
     return scrollTop.value >= 360
 })
 
-
+onActivated(() => {
+  homeRef?.value?.scrollTo({
+    top: scrollTop.value
+  })
+})
 
 </script>
 
 <style lang="less" scoped>
 
 .home {
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
   padding-bottom: 60px;
 }
 .banner {
