@@ -1,4 +1,5 @@
 import { ref, onMounted, onUnmounted } from "vue";
+import { throttle } from 'underscore'
 
 export default function useScroll(elRef) {
   let el = window
@@ -9,7 +10,8 @@ export default function useScroll(elRef) {
   const scrollTop = ref(0)
   const scrollHeight = ref(0)
 
-  const scrollListenerHandler = () => {
+  // 节流，若频繁出现请求，每秒只执行一次
+  const scrollListenerHandler = throttle(() => {
     if (el === window) {
       clientHeight.value = document.documentElement.clientHeight
       scrollTop.value = document.documentElement.scrollTop
@@ -25,7 +27,7 @@ export default function useScroll(elRef) {
       console.log("到达底部")
       isReachBottom.value = true
     }
-  }
+  }, 1000)
 
   onMounted(() => {
     if (elRef) {

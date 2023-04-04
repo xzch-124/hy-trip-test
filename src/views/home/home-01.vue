@@ -12,7 +12,7 @@
         </div>
 
         <home-content></home-content>       
-        <button @click="moreData">加载更多</button>
+        <!-- <button @click="moreData">加载更多</button> -->
     </div>
 </template>
 
